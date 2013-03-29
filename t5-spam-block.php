@@ -152,6 +152,9 @@ class T5_Spam_Block
 		$text = __( 'Edit comment block list', 'plugin_t5_spam_block' );
 		$link = "<a href='$url'>$text</a>";
 
+		// No need for further work.
+		remove_filter( 'plugin_row_meta', array ( $this, __FUNCTION__ ) );
+
 		return array_merge( $links, array ( $link ) );
 	}
 

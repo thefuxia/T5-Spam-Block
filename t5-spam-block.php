@@ -262,6 +262,8 @@ class T5_Spam_Block
 			esc_textarea( $data ),
 			$label
 		);
+
+		unset( $GLOBALS['l10n']['plugin_t5_spam_block'] );
 	}
 
 	/**
@@ -298,16 +300,4 @@ class T5_Spam_Block
 
 		return $list;
 	}
-}
-
-function debug_globals()
-{
-	header( 'Content-Type: text/plain;charset=utf-8' );
-
-	foreach ( $GLOBALS as $key => $val )
-	{
-		if ( is_scalar( $val ) )
-			echo "$key: $val\n";
-	}
-	exit;
 }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: T5 Spam Block
  * Description: Block spam before it reaches the database.
- * Plugin URI:
+ * Plugin URI:  https://github.com/toscho/T5-Spam-Block
  * Version:     2013.03.29
  * Author:      Thomas Scholz
  * Author URI:  http://toscho.de

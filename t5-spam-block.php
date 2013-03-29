@@ -154,6 +154,7 @@ class T5_Spam_Block
 
 		// No need for further work.
 		remove_filter( 'plugin_row_meta', array ( $this, __FUNCTION__ ) );
+		$this->unload_language();
 
 		return array_merge( $links, array ( $link ) );
 	}
@@ -266,7 +267,7 @@ class T5_Spam_Block
 			$label
 		);
 
-		unset( $GLOBALS['l10n']['plugin_t5_spam_block'] );
+		$this->unload_language();
 	}
 
 	/**
@@ -279,6 +280,16 @@ class T5_Spam_Block
 	{
 		$path = plugin_basename( dirname( __FILE__ ) ) . '/languages';
 		load_plugin_textdomain( 'plugin_t5_spam_block', FALSE, $path );
+	}
+
+	/**
+	 * Remove translations from memory.
+	 *
+	 * @return void
+	 */
+	protected function unload_language()
+	{
+		unset( $GLOBALS['l10n']['plugin_t5_spam_block'] );
 	}
 
 	/**

@@ -301,6 +301,13 @@ class T5_Spam_Block
 	 */
 	public function show_settings( Array $args )
 	{
+		$this->print_block_list_ui();
+		$this->print_name_length_ui();
+		$this->unload_language();
+	}
+
+	protected function print_block_list_ui()
+	{
 		$data = $this->get_block_list();
 		$data = join( "\n", $data );
 		$label_trans = _x(
@@ -318,7 +325,10 @@ class T5_Spam_Block
 			esc_textarea( $data ),
 			$label
 		);
+	}
 
+	protected function print_name_length_ui()
+	{
 		$name_length_label = __( 'Comment author name maximum length.', 'plugin_t5_spam_block' );
 		$name_length_desc  = sprintf( _x( '%s disables this check.', '%s = <code>0</code>', 'plugin_t5_spam_block' ), '<code>0</code>' );
 		$name_length_id    = $this->option . '_name_length';
@@ -331,8 +341,6 @@ class T5_Spam_Block
 			$name_length_value,
 			$name_length_label . ' (<span class="description">' . $name_length_desc . '</span>)'
 		);
-
-		$this->unload_language();
 	}
 
 	/**

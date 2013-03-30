@@ -355,7 +355,7 @@ class T5_Spam_Block
 		if ( NULL !== $list )
 			return $list;
 
-		$data = get_option( 't5_spam_block', array () );
+		$data = get_option( $this->option, array () );
 
 		// there might be an array like 'array( 0 => "" )' when someone updates
 		// this per "wp-admin/options.php".

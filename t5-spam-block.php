@@ -125,8 +125,11 @@ class T5_Spam_Block
 		if ( 'wp-comments-post' === self::$base_page )
 			return add_action( 'pre_comment_on_post', array ( $this, 'check_comment' ) );
 
-		if ( 'options' === self::$base_page || 'options-discussion' === self::$base_page )
-			return add_action( 'admin_init', array ( $this, 'register_settings' ) );
+		if ( 'options' === self::$base_page )
+			return add_action( 'admin_init', array ( $this, 'register_setting' ) );
+
+		if ( 'options-discussion' === self::$base_page )
+			return add_action( 'admin_init', array ( $this, 'add_settings_field' ) );
 
 		// Now 'plugins' === self::$base_page
 		// Used by add_settings_link() later.
@@ -145,7 +148,6 @@ class T5_Spam_Block
 	{
 		if ( $this->base_name !== $file )
 			return $links;
-
 
 		$url  = admin_url( 'options-discussion.php' );
 
@@ -204,24 +206,12 @@ class T5_Spam_Block
 	 * @wp-hook admin_init
 	 * @return  void
 	 */
-	public function register_settings()
+	public function register_setting()
 	{
-		$this->load_language();
-		$section = 'discussion';
-
 		register_setting(
-			$section,
+			'discussion',
 			$this->option,
-			array ( $this, 'save_settings' )
-		);
-
-		add_settings_field(
-			$this->option,
-			__( 'Block comments completely', 'plugin_t5_spam_block' ),
-			array ( $this, 'show_settings' ),
-			$section,
-			'default',
-			array ( 'label_for' => 't5_spam_kill_list_id' )
+			array ( $this, 'save_setting' )
 		);
 	}
 
@@ -232,7 +222,7 @@ class T5_Spam_Block
 	 * @param   string $data
 	 * @return array
 	 */
-	public function save_settings( $data )
+	public function save_setting( $data )
 	{
 		$lines = explode( "\n", $data );
 		$lines = array_map( 'trim', $lines );
@@ -241,6 +231,25 @@ class T5_Spam_Block
 		sort( $lines );
 
 		return $lines;
+	}
+
+	/**
+	 * Register textarea for block list.
+	 *
+	 * @wp-hook admin_init
+	 */
+	public function add_settings_field()
+	{
+		$this->load_language();
+
+		add_settings_field(
+			$this->option,
+			__( 'Block comments completely', 'plugin_t5_spam_block' ),
+			array ( $this, 'show_settings' ),
+			'discussion',
+			'default',
+			array ( 'label_for' => 't5_spam_kill_list_id' )
+		);
 	}
 
 	/**

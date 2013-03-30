@@ -326,7 +326,7 @@ class T5_Spam_Block
 	 *
 	 * @return bool
 	 */
-	public function load_language()
+	protected function load_language()
 	{
 		$path = plugin_basename( dirname( __FILE__ ) ) . '/languages';
 		return load_plugin_textdomain( 'plugin_t5_spam_block', FALSE, $path );

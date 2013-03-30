@@ -123,12 +123,10 @@ class T5_Spam_Block
 	{
 		// Register callbacks only when needed.
 		if ( 'wp-comments-post' === self::$base_page )
-			add_action( 'pre_comment_on_post', array ( $this, 'check_comment' ) );
-
-		$this->load_language();
+			return add_action( 'pre_comment_on_post', array ( $this, 'check_comment' ) );
 
 		if ( 'options' === self::$base_page || 'options-discussion' === self::$base_page )
-			add_action( 'admin_init', array ( $this, 'register_settings' ) );
+			return add_action( 'admin_init', array ( $this, 'register_settings' ) );
 
 		// Now 'plugins' === self::$base_page
 		// Used by add_settings_link() later.
@@ -148,13 +146,17 @@ class T5_Spam_Block
 		if ( $this->base_name !== $file )
 			return $links;
 
+
 		$url  = admin_url( 'options-discussion.php' );
+
+		$this->load_language();
 		$text = __( 'Edit comment block list', 'plugin_t5_spam_block' );
+		$this->unload_language();
+
 		$link = "<a href='$url'>$text</a>";
 
 		// No need for further work.
 		remove_filter( 'plugin_row_meta', array ( $this, __FUNCTION__ ) );
-		$this->unload_language();
 
 		return array_merge( $links, array ( $link ) );
 	}
@@ -204,6 +206,7 @@ class T5_Spam_Block
 	 */
 	public function register_settings()
 	{
+		$this->load_language();
 		$section = 'discussion';
 
 		register_setting(

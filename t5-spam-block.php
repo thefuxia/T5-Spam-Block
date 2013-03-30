@@ -80,6 +80,7 @@ class T5_Spam_Block
 		'louboutin',
 		'outlet',
 		'replica',
+		'ringtones',
 		'submit\-link4u\.net',
 		'tiny\.cc',
 		'vuitton',

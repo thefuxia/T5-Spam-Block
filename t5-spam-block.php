@@ -168,7 +168,7 @@ class T5_Spam_Block
 		$text = __( 'Edit comment block list', 'plugin_t5_spam_block' );
 		$this->unload_language();
 
-		$link = "<a href='$url#t5_spam_kill_list_id'>$text</a>";
+		$link = "<a href='$url#{$this->option}_id'>$text</a>";
 
 		// No need for further work.
 		remove_filter( 'plugin_row_meta', array ( $this, __FUNCTION__ ) );
@@ -261,7 +261,7 @@ class T5_Spam_Block
 			array ( $this, 'show_settings' ),
 			'discussion',
 			'default',
-			array ( 'label_for' => 't5_spam_kill_list_id' )
+			array ( 'label_for' => "{$this->option}_id" )
 		);
 	}
 
@@ -286,7 +286,7 @@ class T5_Spam_Block
 		printf(
 			'<p><label for="%2$s">%4$s</label></p>
 			<textarea name="%1$s" id="%2$s" rows="10" cols="30" class="large-text code">%3$s</textarea>',
-			't5_spam_block',
+			$this->option,
 			$args['label_for'],
 			esc_textarea( $data ),
 			$label

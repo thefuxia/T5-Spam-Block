@@ -15,7 +15,7 @@
 
 
 if ( T5_Spam_Block::start_me() )
-	add_action( 'wp_loaded', array ( 'T5_Spam_Block', 'get_instance' ) );
+	add_action( 'wp_loaded', array ( T5_Spam_Block::get_instance(), 'plugin_setup' ) );
 
 /**
  * Simple spam block based on stop words.
@@ -64,11 +64,16 @@ class T5_Spam_Block
 		'[a-z]\d+\.fr',
 		'bestonline',
 		'bag\.sh',
+		'bit\.ly',
+		'cheap\.[^ ]',
+		'/cheap',
 		'cialis',
+		'demo2\.com',
 		'facebook\.com/profile',
 		'goo\.gl',
 		'gucci',
 		'handbag',
+		'interesy',
 		'louboutin',
 		'outlet',
 		'replica',
@@ -115,11 +120,19 @@ class T5_Spam_Block
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor. Intentionally left blank.
 	 *
 	 * @wp-hook wp_loaded
 	 */
-	public function __construct()
+	public function __construct() {}
+
+	/**
+	 * Register actions.
+	 *
+	 * @wp-hook wp_loaded
+	 * @return  boolean
+	 */
+	public function plugin_setup()
 	{
 		// Register callbacks only when needed.
 		if ( 'wp-comments-post' === self::$base_page )
@@ -134,7 +147,7 @@ class T5_Spam_Block
 		// Now 'plugins' === self::$base_page
 		// Used by add_settings_link() later.
 		$this->base_name  = plugin_basename( __FILE__ );
-		add_filter( 'plugin_row_meta', array ( $this, 'add_settings_link' ), 10, 2 );
+		return add_filter( 'plugin_row_meta', array ( $this, 'add_settings_link' ), 10, 2 );
 	}
 
 	/**

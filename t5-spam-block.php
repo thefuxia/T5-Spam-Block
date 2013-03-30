@@ -39,14 +39,14 @@ class T5_Spam_Block
 	 *
 	 * @type string
 	 */
-	protected static $base_page;
+	protected static $page_base;
 
 	/**
 	 * Plugin base name.
 	 *
 	 * @type string
 	 */
-	protected $base_name;
+	protected $plugin_base;
 
 	/**
 	 * Plugin option name.
@@ -114,7 +114,7 @@ class T5_Spam_Block
 		if ( ! in_array( $base, $pages ) )
 			return FALSE;
 
-		self::$base_page = $base;
+		self::$page_base = $base;
 
 		return TRUE;
 	}
@@ -135,18 +135,18 @@ class T5_Spam_Block
 	public function plugin_setup()
 	{
 		// Register callbacks only when needed.
-		if ( 'wp-comments-post' === self::$base_page )
+		if ( 'wp-comments-post' === self::$page_base )
 			return add_action( 'pre_comment_on_post', array ( $this, 'check_comment' ) );
 
-		if ( 'options' === self::$base_page )
+		if ( 'options' === self::$page_base )
 			return add_action( 'admin_init', array ( $this, 'register_setting' ) );
 
-		if ( 'options-discussion' === self::$base_page )
+		if ( 'options-discussion' === self::$page_base )
 			return add_action( 'admin_init', array ( $this, 'add_settings_field' ) );
 
-		// Now 'plugins' === self::$base_page
+		// Now 'plugins' === self::$page_base
 		// Used by add_settings_link() later.
-		$this->base_name  = plugin_basename( __FILE__ );
+		$this->plugin_base  = plugin_basename( __FILE__ );
 		return add_filter( 'plugin_row_meta', array ( $this, 'add_settings_link' ), 10, 2 );
 	}
 
@@ -159,7 +159,7 @@ class T5_Spam_Block
 	 */
 	public function add_settings_link( $links, $file )
 	{
-		if ( $this->base_name !== $file )
+		if ( $this->plugin_base !== $file )
 			return $links;
 
 		$url  = admin_url( 'options-discussion.php' );
@@ -168,7 +168,7 @@ class T5_Spam_Block
 		$text = __( 'Edit comment block list', 'plugin_t5_spam_block' );
 		$this->unload_language();
 
-		$link = "<a href='$url'>$text</a>";
+		$link = "<a href='$url#t5_spam_kill_list_id'>$text</a>";
 
 		// No need for further work.
 		remove_filter( 'plugin_row_meta', array ( $this, __FUNCTION__ ) );

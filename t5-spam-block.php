@@ -108,13 +108,11 @@ class T5_Spam_Block
 		if ( empty ( $pagenow ) )
 			return FALSE;
 
-		$base  = basename( $pagenow, '.php' );
+		self::$page_base  = basename( $pagenow, '.php' );
 		$pages = array ( 'options', 'options-discussion', 'plugins', 'wp-comments-post' );
 
-		if ( ! in_array( $base, $pages ) )
+		if ( ! in_array( self::$page_base, $pages ) )
 			return FALSE;
-
-		self::$page_base = $base;
 
 		return TRUE;
 	}

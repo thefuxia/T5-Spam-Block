@@ -15,7 +15,10 @@
 
 
 if ( T5_Spam_Block::start_me() )
-	add_action( 'wp_loaded', array ( T5_Spam_Block::get_instance(), 'plugin_setup' ) );
+	add_action(
+		'wp_loaded',
+		array ( T5_Spam_Block::get_instance(), 'plugin_setup' )
+	);
 
 /**
  * Simple spam block based on stop words.
@@ -92,7 +95,9 @@ class T5_Spam_Block
 	 */
 	public static function get_instance()
 	{
-		NULL === self::$instance && self::$instance = new self;
+		if ( NULL === self::$instance )
+			self::$instance = new self;
+
 		return self::$instance;
 	}
 
@@ -108,10 +113,15 @@ class T5_Spam_Block
 		if ( empty ( $pagenow ) )
 			return FALSE;
 
-		self::$page_base  = basename( $pagenow, '.php' );
-		$pages = array ( 'options', 'options-discussion', 'plugins', 'wp-comments-post' );
+		self::$page_base = basename( $pagenow, '.php' );
+		$active_pages    = array (
+			'options',
+			'options-discussion',
+			'plugins',
+			'wp-comments-post'
+		);
 
-		if ( ! in_array( self::$page_base, $pages ) )
+		if ( ! in_array( self::$page_base, $active_pages ) )
 			return FALSE;
 
 		return TRUE;
@@ -134,18 +144,33 @@ class T5_Spam_Block
 	{
 		// Register callbacks only when needed.
 		if ( 'wp-comments-post' === self::$page_base )
-			return add_action( 'pre_comment_on_post', array ( $this, 'check_comment' ) );
+			return add_action(
+				'pre_comment_on_post',
+				array ( $this, 'check_comment' )
+			);
 
 		if ( 'options' === self::$page_base )
-			return add_action( 'admin_init', array ( $this, 'register_setting' ) );
+			return add_action(
+				'admin_init',
+				array ( $this, 'register_setting' )
+			);
 
 		if ( 'options-discussion' === self::$page_base )
-			return add_action( 'admin_init', array ( $this, 'add_settings_field' ) );
+			return add_action(
+				'admin_init',
+				array ( $this, 'add_settings_field' )
+			);
 
 		// Now 'plugins' === self::$page_base
 		// Used by add_settings_link() later.
 		$this->plugin_base  = plugin_basename( __FILE__ );
-		return add_filter( 'plugin_row_meta', array ( $this, 'add_settings_link' ), 10, 2 );
+
+		return add_filter(
+			'plugin_row_meta',
+			array ( $this, 'add_settings_link' ),
+			10,
+			2
+		);
 	}
 
 	/**
@@ -185,10 +210,13 @@ class T5_Spam_Block
 		if ( wp_get_current_user()->exists() )
 			return;
 
-		if ( ! isset ( $_POST['comment'] )
-			or '' === trim( $_POST['comment'] )
-			or $this->is_spam( $_POST['comment'] )
-		)
+		if ( ! isset ( $_POST['comment'] ) )
+			exit;
+
+		if ( '' === trim( $_POST['comment'] ) )
+			exit;
+
+		if ( $this->is_spam( $_POST['comment'] ) )
 			exit;
 
 		if ( isset ( $_POST['url'] ) and $this->is_spam( $_POST['url'] ) )
@@ -227,11 +255,11 @@ class T5_Spam_Block
 	}
 
 	/**
-	 * Prepare option values before they reach the database.
+	 * Prepare option values before they are saved.
 	 *
 	 * @wp-hook sanitize_option_t5_spam_block
 	 * @param   string $data
-	 * @return array
+	 * @return  array
 	 */
 	public function save_setting( $data )
 	{
@@ -296,13 +324,12 @@ class T5_Spam_Block
 	/**
 	 * Loads translation file.
 	 *
-	 * @wp-hook plugins_loaded
-	 * @return  void
+	 * @return bool
 	 */
 	public function load_language()
 	{
 		$path = plugin_basename( dirname( __FILE__ ) ) . '/languages';
-		load_plugin_textdomain( 'plugin_t5_spam_block', FALSE, $path );
+		return load_plugin_textdomain( 'plugin_t5_spam_block', FALSE, $path );
 	}
 
 	/**
@@ -312,7 +339,7 @@ class T5_Spam_Block
 	 */
 	protected function unload_language()
 	{
-		unset( $GLOBALS['l10n']['plugin_t5_spam_block'] );
+		unset ( $GLOBALS['l10n']['plugin_t5_spam_block'] );
 	}
 
 	/**
@@ -328,7 +355,7 @@ class T5_Spam_Block
 		if ( NULL !== $list )
 			return $list;
 
-		$data = (array) get_option( 't5_spam_block', array () );
+		$data = get_option( 't5_spam_block', array () );
 
 		// there might be an array like 'array( 0 => "" )' when someone updates
 		// this per "wp-admin/options.php".

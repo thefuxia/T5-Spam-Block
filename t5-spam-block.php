@@ -222,6 +222,17 @@ class T5_Spam_Block
 
 		if ( isset ( $_POST['url'] ) and $this->is_spam( $_POST['url'] ) )
 			exit;
+
+		if ( ! isset ( $_POST['author'] ) )
+			return;
+
+		$name_max = $this->get_option( 'name_length', 0 );
+
+		if ( 0 === $name_max )
+			return;
+
+		if ( strlen( utf8_decode( $_POST['author'] ) ) > $name_max )
+			exit;
 	}
 
 	/**
@@ -264,13 +275,22 @@ class T5_Spam_Block
 	 */
 	public function save_setting( $data )
 	{
-		$lines = explode( "\n", $data );
-		$lines = array_map( 'trim', $lines );
-		$lines = array_unique( $lines );
-		$lines = array_filter( $lines );
-		sort( $lines );
+		$new_data = array ();
 
-		return $lines;
+		if ( isset ( $data['block_list'] ) )
+		{
+			$lines = explode( "\n", $data['block_list'] );
+			$lines = array_map( 'trim', $lines );
+			$lines = array_unique( $lines );
+			$lines = array_filter( $lines );
+			sort( $lines );
+			$new_data['block_list'] = $lines;
+		}
+
+		if ( isset ( $data['name_length'] ) )
+			$new_data['name_length'] = absint( $data['name_length'] );
+
+		return $new_data;
 	}
 
 	/**
@@ -301,12 +321,12 @@ class T5_Spam_Block
 	 */
 	public function show_settings( Array $args )
 	{
-		$this->print_block_list_ui();
+		$this->print_block_list_ui( $args['label_for'] );
 		$this->print_name_length_ui();
 		$this->unload_language();
 	}
 
-	protected function print_block_list_ui()
+	protected function print_block_list_ui( $label_for )
 	{
 		$data = $this->get_block_list();
 		$data = join( "\n", $data );
@@ -319,27 +339,28 @@ class T5_Spam_Block
 
 		printf(
 			'<p><label for="%2$s">%4$s</label></p>
-			<textarea name="%1$s" id="%2$s" rows="10" cols="30" class="large-text code">%3$s</textarea></p>',
+			<textarea name="%1$s[%5$s]" id="%2$s" rows="10" cols="30" class="large-text code">%3$s</textarea></p>',
 			$this->option,
-			$args['label_for'],
+			$label_for,
 			esc_textarea( $data ),
-			$label
+			$label,
+			'block_list'
 		);
 	}
 
 	protected function print_name_length_ui()
 	{
-		$name_length_label = __( 'Comment author name maximum length.', 'plugin_t5_spam_block' );
-		$name_length_desc  = sprintf( _x( '%s disables this check.', '%s = <code>0</code>', 'plugin_t5_spam_block' ), '<code>0</code>' );
-		$name_length_id    = $this->option . '_name_length';
-		$name_length_value = 100;
+		$label = __( 'Comment author name maximum length.', 'plugin_t5_spam_block' );
+		$desc  = sprintf( _x( '%s disables this check.', '%s = <code>0</code>', 'plugin_t5_spam_block' ), '<code>0</code>' );
+		$id    = $this->option . '_name_length';
+		$value = absint( $this->get_option( 'name_length', 100 ) );
 
 		printf(
 			'<p><label for="%1$s"><input type="number" name="%2$s" id="%1$s" value="%3$s" size="3" min="0" /> %4$s</label></p>',
-			$name_length_id,
+			$id,
 			$this->option . '[name_length]',
-			$name_length_value,
-			$name_length_label . ' (<span class="description">' . $name_length_desc . '</span>)'
+			$value,
+			$label . ' (<span class="description">' . $desc . '</span>)'
 		);
 	}
 
@@ -364,6 +385,30 @@ class T5_Spam_Block
 		unset ( $GLOBALS['l10n']['plugin_t5_spam_block'] );
 	}
 
+	protected function get_option( $key = NULL, $default = FALSE )
+	{
+		static $option = NULL;
+
+		if ( NULL === $option )
+		{
+			$option = get_option( $this->option, FALSE );
+
+			if ( FALSE === $option )
+				$option = array (
+					'name_length' => 100,
+					'block_list'  => $this->default_list
+				);
+		}
+
+		if ( NULL === $key )
+			return $option;
+
+		if ( ! isset ( $option[ $key ] ) )
+			return $default;
+
+		return $option[ $key ];
+	}
+
 	/**
 	 * List of stop words.
 	 *
@@ -377,7 +422,7 @@ class T5_Spam_Block
 		if ( NULL !== $list )
 			return $list;
 
-		$data = get_option( $this->option, array () );
+		$data = $this->get_option( 'block_list', array () );
 
 		// there might be an array like 'array( 0 => "" )' when someone updates
 		// this per "wp-admin/options.php".

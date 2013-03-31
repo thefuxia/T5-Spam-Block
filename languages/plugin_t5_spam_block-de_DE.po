@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: T5 Spam Block v2013.03.29\n"
+"Project-Id-Version: T5 Spam Block v2013.03.31\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-03-29 20:48:11+0000\n"
+"PO-Revision-Date: 2013-03-31 11:39:03+0000\n"
 "Last-Translator: toscho <info@toscho.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -38,23 +38,17 @@ msgstr ""
 msgid "http://toscho.de"
 msgstr ""
 
-#. translators: plugin header field 'Version'
-#: t5-spam-block.php:0
-#@ plugin_t5_spam_block
-msgid "2013.03.29"
-msgstr ""
-
-#: t5-spam-block.php:152
+#: t5-spam-block.php:192
 #@ plugin_t5_spam_block
 msgid "Edit comment block list"
 msgstr "Kommentarblockliste bearbeiten"
 
-#: t5-spam-block.php:213
+#: t5-spam-block.php:307
 #@ plugin_t5_spam_block
 msgid "Block comments completely"
 msgstr "Sperre Kommentare vollständig"
 
-#: t5-spam-block.php:251
+#: t5-spam-block.php:340
 #, php-format
 #@ plugin_t5_spam_block
 msgctxt "%s = <code>~</code>"
@@ -66,4 +60,28 @@ msgstr "Diese Kommentare werden abgewiesen, ehe sie die Datenbank erreichen. Sie
 #@ plugin_t5_spam_block
 msgid "Block spam before it reaches the database."
 msgstr "Blockiere Spam, bevor er die Datenbank erreicht."
+
+#. translators: plugin header field 'PluginURI'
+#: t5-spam-block.php:0
+#@ plugin_t5_spam_block
+msgid "https://github.com/toscho/T5-Spam-Block"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: t5-spam-block.php:0
+#@ plugin_t5_spam_block
+msgid "2013.03.31"
+msgstr ""
+
+#: t5-spam-block.php:364
+#@ plugin_t5_spam_block
+msgid "Comment author name maximum length."
+msgstr "Maximallänge des Namens des Kommentators"
+
+#: t5-spam-block.php:367
+#, php-format
+#@ plugin_t5_spam_block
+msgctxt "%s = <code>0</code>"
+msgid "%s disables this check."
+msgstr "%s deaktiviert die Kontrolle."
 

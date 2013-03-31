@@ -364,7 +364,7 @@ class T5_Spam_Block
 		$label = __( 'Comment author name maximum length.', 'plugin_t5_spam_block' );
 		$desc  = sprintf(
 			_x(
-				'%s disables this check.',
+				'%s disables this check',
 				'%s = <code>0</code>',
 				'plugin_t5_spam_block' ),
 			'<code>0</code>'

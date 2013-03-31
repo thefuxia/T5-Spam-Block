@@ -326,6 +326,12 @@ class T5_Spam_Block
 		$this->unload_language();
 	}
 
+	/**
+	 * Print textarea with regex list.
+	 *
+	 * @param  string $label_for
+	 * @return void
+	 */
 	protected function print_block_list_ui( $label_for )
 	{
 		$data = $this->get_block_list();
@@ -348,6 +354,11 @@ class T5_Spam_Block
 		);
 	}
 
+	/**
+	 * Print input[type=number] for name max length.
+	 *
+	 * @return void
+	 */
 	protected function print_name_length_ui()
 	{
 		$label = __( 'Comment author name maximum length.', 'plugin_t5_spam_block' );
@@ -385,6 +396,13 @@ class T5_Spam_Block
 		unset ( $GLOBALS['l10n']['plugin_t5_spam_block'] );
 	}
 
+	/**
+	 * Wrapper for get_option()
+	 *
+	 * @param  string $key sub-tree entry
+	 * @param  mixed $default return value for missing keys
+	 * @return mixed|$default
+	 */
 	protected function get_option( $key = NULL, $default = FALSE )
 	{
 		static $option = NULL;

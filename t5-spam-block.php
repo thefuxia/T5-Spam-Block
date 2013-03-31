@@ -345,7 +345,7 @@ class T5_Spam_Block
 
 		printf(
 			'<p><label for="%2$s">%4$s</label></p>
-			<textarea name="%1$s[%5$s]" id="%2$s" rows="10" cols="30" class="large-text code">%3$s</textarea></p>',
+			<textarea name="%1$s[%5$s]" id="%2$s" rows="10" cols="30" class="large-text code">%3$s</textarea>',
 			$this->option,
 			$label_for,
 			esc_textarea( $data ),
@@ -362,12 +362,23 @@ class T5_Spam_Block
 	protected function print_name_length_ui()
 	{
 		$label = __( 'Comment author name maximum length.', 'plugin_t5_spam_block' );
-		$desc  = sprintf( _x( '%s disables this check.', '%s = <code>0</code>', 'plugin_t5_spam_block' ), '<code>0</code>' );
+		$desc  = sprintf(
+			_x(
+				'%s disables this check.',
+				'%s = <code>0</code>',
+				'plugin_t5_spam_block' ),
+			'<code>0</code>'
+		);
 		$id    = $this->option . '_name_length';
 		$value = absint( $this->get_option( 'name_length', 100 ) );
 
 		printf(
-			'<p><label for="%1$s"><input type="number" name="%2$s" id="%1$s" value="%3$s" size="3" min="0" /> %4$s</label></p>',
+			'<p>
+				<label for="%1$s">
+					<input type="number" name="%2$s" id="%1$s" value="%3$s" size="3" min="0" />
+					%4$s
+				</label>
+			</p>',
 			$id,
 			$this->option . '[name_length]',
 			$value,

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: T5 Spam Block v2013.03.31\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-03-31 11:39:03+0000\n"
+"PO-Revision-Date: 2013-03-31 12:03:36+0000\n"
 "Last-Translator: toscho <info@toscho.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -82,6 +82,6 @@ msgstr "Maximallänge des Namens des Kommentators"
 #, php-format
 #@ plugin_t5_spam_block
 msgctxt "%s = <code>0</code>"
-msgid "%s disables this check."
-msgstr "%s deaktiviert die Kontrolle."
+msgid "%s disables this check"
+msgstr "%s deaktiviert die Kontrolle"
 

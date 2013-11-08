@@ -68,6 +68,7 @@ class T5_Spam_Block
 		'bestonline',
 		'bag\.sh',
 		'bit\.ly',
+		'casino',
 		'cheap\.[^ ]',
 		'/cheap',
 		'cialis',
@@ -174,13 +175,14 @@ class T5_Spam_Block
 		);
 	}
 
-	/**
-	 * Adds a link to the settings to plugin list.
-	 *
-	 * @wp-hook plugin_row_meta
-	 * @param   array  $links Already existing links.
-	 * @return  string
-	 */
+    /**
+     * Adds a link to the settings to plugin list.
+     *
+     * @wp-hook plugin_row_meta
+     * @param   array $links Already existing links.
+     * @param   string $file
+     * @return  string
+     */
 	public function add_settings_link( $links, $file )
 	{
 		if ( $this->plugin_base !== $file )

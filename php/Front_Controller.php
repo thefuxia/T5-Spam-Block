@@ -3,7 +3,7 @@ namespace SpamBlock;
 
 /**
  * Created by PhpStorm.
- * User: julian
+
  * Date: 08.11.13
  * Time: 23:34
  */

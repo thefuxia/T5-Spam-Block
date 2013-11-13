@@ -1,9 +1,10 @@
 <?php  # -*- coding: utf-8 -*-
+namespace SpamBlock;
 /**
  * Plugin Name: T5 Spam Block
  * Description: Block spam before it reaches the database.
  * Plugin URI:  https://github.com/toscho/T5-Spam-Block
- * Version:     2013.03.31
+ * Version:     2013.11.08
  * Author:      Thomas Scholz
  * Author URI:  http://toscho.de
  * Licence:     MIT
@@ -13,6 +14,21 @@
  */
 // See also https://gist.github.com/splorp/1385930 for inspiration.
 
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
+
+function init() {
+
+	$php_base = __DIR__ . '/php';
+	$files    = [ 'Autoload_Interface', 'Autoload_Rule_Interface', 'Autoload', 'Autoload_Rule' ];
+
+	foreach ( $files as $file )
+		require "$php_base/autoload/$file.php";
+
+	$autoload = new Autoload();
+	$autoload->add_rule( new Spamblock_Autoload_Rule( $php_base . '/%s.php' ) );
+
+	$front_controller = new Front_Controller( __FILE__, $autoload );
+}
 
 if ( T5_Spam_Block::start_me() )
 	add_action(
